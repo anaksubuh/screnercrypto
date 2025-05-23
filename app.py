@@ -88,7 +88,7 @@ temp_settings["col_count"] = st.sidebar.selectbox(
     index=[1, 2, 3, 4, 5].index(temp_settings["col_count"])
 )
 temp_settings["ban_count"] = st.sidebar.selectbox(
-    "Jumlah Kolom", 
+    "Jumlah Chart 1 halaman", 
     options=list(range(1, 26)),  # Angka 1 sampai 25
     index=temp_settings.get("ban_count", 1) - 1  # Default ke 1 jika tidak ada
 )
