@@ -21,6 +21,7 @@ st.set_page_config(
 def load_settings():
     default_settings = {
         "col_count": 2,
+        "ban_count": 10,
         "interval": "60",
         "show_details": True,
         "show_calendar": True,
@@ -85,6 +86,11 @@ st.sidebar.header("⚙️ Pengaturan Tampilan")
 temp_settings["col_count"] = st.sidebar.selectbox(
     "Jumlah Kolom", [1, 2, 3, 4, 5], 
     index=[1, 2, 3, 4, 5].index(temp_settings["col_count"])
+)
+temp_settings["ban_count"] = st.sidebar.selectbox(
+    "Jumlah Kolom", 
+    options=list(range(1, 26)),  # Angka 1 sampai 25
+    index=temp_settings.get("ban_count", 1) - 1  # Default ke 1 jika tidak ada
 )
 temp_settings["interval"] = st.sidebar.selectbox(
     "Interval", ["1", "5", "15", "30", "60", "120", "D", "W", "M"], 

@@ -1,5 +1,6 @@
 {
   "col_count": 2,
+  "ban_count": 10,
   "interval": "60",
   "show_details": false,
   "show_calendar": false,
