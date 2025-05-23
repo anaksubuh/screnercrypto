@@ -1,0 +1,13 @@
+{
+  "col_count": 2,
+  "interval": "60",
+  "show_details": false,
+  "show_calendar": false,
+  "show_hotlist": false,
+  "indicators": [],
+  "selected_brokers": [
+    "Binance"
+  ],
+  "selected_types": [],
+  "current_page": 1
+}
