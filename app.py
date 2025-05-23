@@ -16,7 +16,6 @@ st.set_page_config(
          'About': '# This is a header. This is an *extremely* cool app!'
     }
 )
-st.set_page_config(layout="wide")
 
 # Fungsi load/save settings
 def load_settings():
