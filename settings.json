@@ -1,7 +1,7 @@
 {
-  "col_count": 2,
+  "col_count": 1,
   "ban_count": 10,
-  "interval": "60",
+  "interval": "D",
   "show_details": false,
   "show_calendar": false,
   "show_hotlist": false,
@@ -12,5 +12,5 @@
     "Binance"
   ],
   "selected_types": [],
-  "current_page": 1
+  "current_page": 8
 }

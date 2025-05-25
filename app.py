@@ -26,7 +26,7 @@ st.set_page_config(
 def load_settings():
     default_settings = {
         "col_count": 2,
-        "ban_count": 10,
+        "ban_count": 10,  # Changed default from 100 to 10
         "interval": "60",
         "show_details": True,
         "show_calendar": True,
@@ -60,8 +60,7 @@ settings = st.session_state.settings
 temp_settings = st.session_state.temp_settings
 
 with st.sidebar:
-
-    selected = option_menu('Menu', ['All','Spesifik'], icons=['house','book','list','chat','gear'], menu_icon="cast", default_index=0)
+    selected = option_menu('Menu', ['All','Spesifik'], icons=['house','book'], menu_icon="cast", default_index=0)
 
 # Baca coin.txt dan ekstrak broker dan jenis yang unik
 @st.cache_data
@@ -92,10 +91,13 @@ temp_settings["col_count"] = st.sidebar.selectbox(
     "Jumlah Kolom", [1, 2, 3, 4, 5], 
     index=[1, 2, 3, 4, 5].index(temp_settings["col_count"])
 )
-temp_settings["ban_count"] = st.sidebar.selectbox(
-    "Jumlah Chart 1 halaman", 
-    options=list(range(1, 1001)),  # Angka 1 sampai 25
-    index=temp_settings.get("ban_count", 1) - 1  # Default ke 1 jika tidak ada
+temp_settings["ban_count"] = st.sidebar.number_input(
+    "Jumlah Chart per halaman", 
+    min_value=1,
+    max_value=50,
+    value=temp_settings.get("ban_count", 10),  # Default to 10 if not set
+    step=1,
+    help="Atur berapa banyak chart yang ditampilkan per halaman"
 )
 temp_settings["interval"] = st.sidebar.selectbox(
     "Interval", ["1", "5", "15", "30", "60", "120", "D", "W", "M"], 
@@ -138,26 +140,25 @@ temp_settings["indicators"] = [indicator_options[i] for i in st.sidebar.multisel
     default=[k for k, v in indicator_options.items() if v in temp_settings["indicators"]]
 )]
 
+st.sidebar.markdown("---")
+
+# Tombol Simpan dan Terapkan
+col1, col2 = st.sidebar.columns(2)
+if col1.button("💾 Simpan Setting"):
+    settings.update(temp_settings)
+    save_settings(settings)
+    st.session_state.settings = settings.copy()
+    st.session_state.temp_settings = settings.copy()
+    st.sidebar.success("✅ Setting berhasil disimpan!")
+
+if col2.button("🔄 Terapkan Filter"):
+    settings.update(temp_settings)
+    st.session_state.settings = settings.copy()
+    st.session_state.temp_settings = settings.copy()
+    st.sidebar.success("✅ Filter diterapkan!")
+
 if selected == 'All':
-    #st.set_page_config(layout="wide")
     st.title("📊 Chart Crypto Otomatis + Setting Persisten")
-
-    st.sidebar.markdown("---")
-
-    # Tombol Simpan dan Terapkan
-    col1, col2 = st.sidebar.columns(2)
-    if col1.button("💾 Simpan Setting"):
-        settings.update(temp_settings)
-        save_settings(settings)
-        st.session_state.settings = settings.copy()
-        st.session_state.temp_settings = settings.copy()
-        st.sidebar.success("✅ Setting berhasil disimpan!")
-
-    if col2.button("🔄 Terapkan Filter"):
-        settings.update(temp_settings)
-        st.session_state.settings = settings.copy()
-        st.session_state.temp_settings = settings.copy()
-        st.sidebar.success("✅ Filter diterapkan!")
 
     # Filter coin berdasarkan broker dan jenis yang dipilih
     filtered_coin_list = []
@@ -176,8 +177,8 @@ if selected == 'All':
             if broker_match and type_match:
                 filtered_coin_list.append(coin)
 
-    # Pagination
-    coins_per_page = 10
+    # Pagination menggunakan ban_count dari settings
+    coins_per_page = settings["ban_count"]
     total_pages = max(1, (len(filtered_coin_list) + coins_per_page - 1) // coins_per_page)
 
     # Input halaman dengan callback untuk update current_page
@@ -204,6 +205,9 @@ if selected == 'All':
     end_idx = min(start_idx + coins_per_page, len(filtered_coin_list))
     current_coins = filtered_coin_list[start_idx:end_idx]
 
+    # Info pagination
+    st.caption(f"Menampilkan {start_idx + 1}-{end_idx} dari {len(filtered_coin_list)} coin (Halaman {settings['current_page']}/{total_pages})")
+
     # Render chart sesuai setting
     for i in range(0, len(current_coins), settings["col_count"]):
         cols = st.columns(settings["col_count"])
@@ -217,7 +221,7 @@ if selected == 'All':
                 jennis = symbol[2]
                 broker = symbol[3]
 
-                unique_id = f"tv_{broker+'_'+namacoin}"
+                unique_id = f"tv_{broker+'_'+namacoin}_{i}_{j}"
                 
                 studies_json = json.dumps(settings["indicators"])
 
@@ -257,6 +261,7 @@ if selected == 'All':
                     st.components.v1.html(chart_html, height=670)
 
 if selected == 'Spesifik':
+    st.title("🔍 Pencarian Spesifik")
     search_term = st.text_input("Cari koin (nama, broker, atau jenis):", "").upper()
 
     # Filter coin berdasarkan pencarian
@@ -281,11 +286,11 @@ if selected == 'Spesifik':
         if not filtered_coins:
             st.warning("Tidak ditemukan koin yang sesuai")
         else:
-            # Pagination - maksimal 10 coin per halaman
-            coins_per_page = 10
+            # Pagination menggunakan ban_count dari settings
+            coins_per_page = settings["ban_count"]
             total_pages = max(1, (len(filtered_coins) + coins_per_page - 1) // coins_per_page)
             
-            # Buat selectbox untuk pagination
+            # Buat input untuk pagination
             if 'search_page' not in st.session_state:
                 st.session_state.search_page = 1
                 
@@ -308,9 +313,9 @@ if selected == 'Spesifik':
             current_coins = filtered_coins[start_idx:end_idx]
             
             # Info pagination
-            st.caption(f"Menampilkan {start_idx + 1}-{end_idx} dari {len(filtered_coins)} hasil")
+            st.caption(f"Menampilkan {start_idx + 1}-{end_idx} dari {len(filtered_coins)} hasil (Halaman {st.session_state.search_page}/{total_pages})")
             
-            # Render hasil pencarian (maksimal 10 per halaman)
+            # Render hasil pencarian
             for i in range(0, len(current_coins), settings["col_count"]):
                 cols = st.columns(settings["col_count"])
                 for j in range(settings["col_count"]):
@@ -323,7 +328,7 @@ if selected == 'Spesifik':
                         jennis = symbol[2]
                         broker = symbol[3]
 
-                        unique_id = f"tv_spec_{broker+'_'+namacoin}_{i+j}"
+                        unique_id = f"tv_spec_{broker+'_'+namacoin}_{i}_{j}"
                         
                         studies_json = json.dumps(settings["indicators"])
 
@@ -362,4 +367,4 @@ if selected == 'Spesifik':
                             st.subheader(f'{namacoin} | {namapanjang} | {jennis} | {broker}')
                             st.components.v1.html(chart_html, height=520)
     else:
-        st.info("Masukkan kata kunci pencarian di atas (contoh: BTC, Binance, dll)")
+        st.info("Masukkan kata kunci pencarian di atas (contoh: BTC, Binance, dll)")    
