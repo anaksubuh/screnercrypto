@@ -5,7 +5,9 @@
   "show_details": false,
   "show_calendar": false,
   "show_hotlist": false,
-  "indicators": [],
+  "indicators": [
+    "MACD@tv-basicstudies"
+  ],
   "selected_brokers": [
     "Binance"
   ],

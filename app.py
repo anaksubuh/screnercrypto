@@ -3,6 +3,11 @@ import streamlit as st
 import json
 import os
 
+
+#Tutorial memasang stop los
+#https://youtube.com/shorts/0rEupUClba0?si=GX5fbH0Mxn3yfCAo
+
+
 SETTINGS_FILE = "settings.json"
 
 st.set_page_config(
@@ -89,7 +94,7 @@ temp_settings["col_count"] = st.sidebar.selectbox(
 )
 temp_settings["ban_count"] = st.sidebar.selectbox(
     "Jumlah Chart 1 halaman", 
-    options=list(range(1, 26)),  # Angka 1 sampai 25
+    options=list(range(1, 1001)),  # Angka 1 sampai 25
     index=temp_settings.get("ban_count", 1) - 1  # Default ke 1 jika tidak ada
 )
 temp_settings["interval"] = st.sidebar.selectbox(
