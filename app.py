@@ -127,7 +127,6 @@ temp_settings["selected_types"] = st.sidebar.multiselect(
     default=temp_settings["selected_types"]
 )
 indicator_options = {
-    "Support and Resistance (High Volume Boxes)": "SupportandResistance(HighVolumeBoxes)@chartprime",
     "RSI": "RSI@tv-basicstudies",
     "MACD": "MACD@tv-basicstudies",
     "EMA": "MAExp@tv-basicstudies",

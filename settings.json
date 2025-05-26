@@ -6,6 +6,7 @@
   "show_calendar": false,
   "show_hotlist": false,
   "indicators": [
+    "SupportandResistance(HighVolumeBoxes)@chartprime",
     "MACD@tv-basicstudies"
   ],
   "selected_brokers": [
