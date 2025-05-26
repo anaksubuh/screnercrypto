@@ -127,13 +127,13 @@ temp_settings["selected_types"] = st.sidebar.multiselect(
     default=temp_settings["selected_types"]
 )
 indicator_options = {
+    "Support and Resistance (High Volume Boxes)": "SupportandResistance(HighVolumeBoxes)@chartprime"
     "RSI": "RSI@tv-basicstudies",
     "MACD": "MACD@tv-basicstudies",
     "EMA": "MAExp@tv-basicstudies",
     "SMA": "MASimple@tv-basicstudies",
     "Bollinger Bands": "BollingerBands@tv-basicstudies",
     "Volume": "Volume@tv-basicstudies",
-    "Support and Resistance (High Volume Boxes)": "SupportandResistance(HighVolumeBoxes)@chartprime"
 }
 
 temp_settings["indicators"] = [indicator_options[i] for i in st.sidebar.multiselect(
