@@ -1,3 +1,4 @@
+title AUTO UPDATE SYSTEM SCENNER crypto
 @echo off
 git config --global --add safe.directory "D:/sinau python/system 23 'streamlite crypto'"
 git add .
