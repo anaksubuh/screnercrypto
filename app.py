@@ -132,8 +132,10 @@ indicator_options = {
     "EMA": "MAExp@tv-basicstudies",
     "SMA": "MASimple@tv-basicstudies",
     "Bollinger Bands": "BollingerBands@tv-basicstudies",
-    "Volume": "Volume@tv-basicstudies"
+    "Volume": "Volume@tv-basicstudies",
+    "Support and Resistance (High Volume Boxes)": "SupportandResistance(HighVolumeBoxes)@chartprime"
 }
+
 temp_settings["indicators"] = [indicator_options[i] for i in st.sidebar.multiselect(
     "Indikator yang digunakan:",
     options=list(indicator_options.keys()),
